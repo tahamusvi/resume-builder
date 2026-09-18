@@ -42,11 +42,6 @@ class ResumeDslCodeGenerator:
 			if code_string is not None:
 				result += code_string
 
-		# result_js = ''
-		# for code_string in self.js_code_stack:
-		#     if code_string is not None:
-		#         result_js += code_string
-
 		base_html = (
 			"<html>\n\n\t<head>"
 			"\n\t\t<meta charset=\"utf-8\">\n\t\t<title>Resume</title>\n\t\t"
@@ -361,17 +356,16 @@ class ResumeDslCodeGenerator:
 		self.operand_stack.pop()
 		name = self.operand_stack.pop()
 
-		name_code = f"<li>\n\t\t\t\t\t\t\t<strong>name:</strong> {name}\n\t\t\t\t\t\t</li>"
-		surname_code = f'\n\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t<strong>surname:</strong> {surname}\n\t\t\t\t\t\t</li>'
-		birth_code = f'\n\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t<strong>birth:</strong> {birth}\n\t\t\t\t\t\t</li>'
-		city_code = f'\n\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t<strong>city:</strong> {city}\n\t\t\t\t\t\t</li>'
+		name_code = f"<h1 style='text-align:center; font-size:1.8rem; margin:10px 0;'>{name} {surname}</h1>"
+		birth_code = f'\n\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t<strong>Birth:</strong> {birth}\n\t\t\t\t\t\t</li>'
+		city_code = f'\n\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t<strong>City:</strong> {city}\n\t\t\t\t\t\t</li>'
 
-		temp = name_code + surname_code + birth_code + city_code
+		temp = birth_code + city_code
 
 		personal_image = ('\n\t\t\t\t<div class=\"profile-img\">'
 						  '\n\t\t\t\t\t<img src=\"face.jpeg\" />\n\t\t\t\t</div>')
-		personal_base_code = (f'<div>\n\t\t\t\t\t<h2 id="typed-text" class="base-item"'
-							  f' style="height: 30px">JS_FLAG_FOR_JOB_TITLE</h2>'
+		personal_base_code = (f'<div>\n\t\t\t\t\t{name_code}\n\t\t\t\t\t<h2 id="typed-text" class="base-item"'
+							  f' style="height: 30px; text-align:center; color:#a8b2d1; font-size:1.1rem;">JS_FLAG_FOR_JOB_TITLE</h2>'
 							  '\n\t\t\t\t\t<ul>\n\t\t\t\t\t\tHERE\n\t\t\t\t\t</ul>\n\t\t\t\t</div>')
 		personal_base_code = personal_base_code.replace("HERE", temp)
 
@@ -410,7 +404,7 @@ class ResumeDslCodeGenerator:
 			number = (float(languages[lan]) % 3) + 1
 
 			element = (f'\n\t\t\t\t\t\t<div class="additional-info-item">\n\t\t\t\t\t\t\t'
-					   f'<li>\n\t\t\t\t\t\t\t\t<strong>hard_skills_item</strong>\n\t\t\t\t\t\t</li>'
+					   f'<div class="skill-name"><strong>hard_skills_item</strong></div>'
 					   f'\n\t\t\t\t\t\t\t<div class="rate">rating-skill\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>')
 
 			fill_star = '\n\t\t\t\t\t\t\t\t<img class="rate-star" src="icons/wstarfilled.svg" alt="">'
@@ -700,7 +694,7 @@ class ResumeDslCodeGenerator:
 
 		# print(soft_skills)
 		element = (f'\n\t\t\t\t\t\t<div class="additional-info-item">'
-				   f'\n\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t<strong>soft_skills_item</strong>\n\t\t\t\t\t\t</li>'
+				   f'\n\t\t\t\t\t\t<div class="skill-name"><strong>soft_skills_item</strong></div>'
 				   f'\n\t\t\t\t\t\t</div>')
 		code_items = ""
 		for soft_skill in soft_skills:
@@ -720,45 +714,67 @@ class ResumeDslCodeGenerator:
 		self.code_stack.append(code_string)
 
 	def generate_hard_skills(self):
-		# print(self.operand_stack)
-
 		temp = self.operand_stack.pop()
 		hard_skills = []
+		
 		if temp == 'end_scope_operator':
 			while temp != 'begin_scope_operator':
 				temp = self.operand_stack.pop()
 				if temp == 'hard_skill':
 					continue
 				hard_skills.append(temp)
+			if hard_skills:
+				hard_skills.pop()
 		else:
-			pass
-		hard_skills.pop()
+			self.operand_stack.append(temp)
 
 		for x in range(len(hard_skills)):
 			hard_skills[x] = hard_skills[x].replace(" ","")
 
-		temp = self.operand_stack.pop()
-		while temp != 'optional_features':
-			if temp in hard_skills:
-				temp = self.operand_stack.pop()
-				continue
-			hard_skills.append('3')
-			hard_skills.append(temp)
+		if len(self.operand_stack) > 0:
 			temp = self.operand_stack.pop()
+			while str(temp).strip() not in ['hard_skills:', 'hard_skills']:
+				if not str(temp).strip():
+					if len(self.operand_stack) == 0:
+						break
+					temp = self.operand_stack.pop()
+					continue
+					
+				if temp in hard_skills:
+					if len(self.operand_stack) == 0:
+						break
+					temp = self.operand_stack.pop()
+					continue
+					
+				hard_skills.append('3')
+				hard_skills.append(temp)
+				if len(self.operand_stack) == 0:
+					break
+				temp = self.operand_stack.pop()
 
 		element = (f'\n\t\t\t\t\t\t<div class="additional-info-item">\n\t\t\t\t\t\t\t'
-				   f'<li>\n\t\t\t\t\t\t\t\t<strong>hard_skills_item</strong>\n\t\t\t\t\t\t</li>'
+				   f'<div class="skill-name"><strong>hard_skills_item</strong></div>'
 				   f'\n\t\t\t\t\t\t\t<div class="rate">rating-skill\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>')
 
 		fill_star = '\n\t\t\t\t\t\t\t\t<img class="rate-star" src="icons/filled star.svg" alt="">'
 		empty_star = '\n\t\t\t\t\t\t\t\t<img class="rate-star" src="icons/star (1).svg" alt="">'
 
 		code_items = ""
-		while len(hard_skills) > 0:
+		while len(hard_skills) > 1:
 			hard_skill_name = hard_skills.pop()
 			hard_skill_rate = hard_skills.pop()
+			
+			if not str(hard_skill_name).strip():
+				continue
+				
 			temp_code = element.replace("hard_skills_item", hard_skill_name)
-			rating_code = fill_star * int(hard_skill_rate) + empty_star * (5 - int(hard_skill_rate))
+			
+			try:
+				rate = int(hard_skill_rate)
+			except ValueError:
+				rate = 3
+				
+			rating_code = fill_star * rate + empty_star * (5 - rate)
 			temp_code = temp_code.replace("rating-skill", rating_code)
 			code_items += temp_code
 

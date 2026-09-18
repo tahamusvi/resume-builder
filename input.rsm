@@ -1,50 +1,41 @@
-go_top: True
-autocopy: True
-job_title_effect: True
-collapsable_sections: True
-theme_switching: True
-tooltip: True
-
 name: Taha
 surname: Mousavi
 job_title: Backend and DevOps Engineer
-phone: +989120000000
+phone: +989303016386
 city: Tehran
-gmail: taha.mousavi@gmail.com
+gmail: taham8000@gmail.com
 birth: 2002
 
 socials:
-Github: https://github.com/CodeNexxus
+Github: https://github.com/tahamusvi
 
 git-username: CodeNexxus
 
-summary:
-Backend developer specializing in microservices
-DevOps engineer with experience in Docker Swarm
+summary: Backend developer and DevOps engineer specializing in microservices architecture container orchestration and CI CD pipelines
 
 hard_skills:
-Go, 5
-Python, 5
-Rust, 4
-Docker, 5
-PostgreSQL, 4
+Python,5
+Rust,4
+Docker,5
+PostgreSQL,4
 
 soft_skills:
 Team Leadership
 Problem Solving
+System Architecture
 
 languages:
 Persian
 English
 
 projects:
-title: Farz Platform
-description: Authentication and messaging platform
-link: https://github.com/CodeNexxus/farz
+title: ferzz Platform
+description: Authentication and messaging platform supporting Flash Call Voice OTP and messenger integrations
+link: https://ferzz.ir
 
-title: Hooshzi AI
-description: AI assistant platform
-link: https://github.com/CodeNexxus/hooshzi
+title: hooshzy AI
+description: AI assistant platform operating on web interfaces and messaging apps
+link: https://hooshzy.ir
 
 work_experience:
 company: Fanaavaran Tosee Rahe Ayandeh
@@ -52,9 +43,8 @@ position: CEO and Backend Developer
 start_date: 2025
 end_date: Present
 responsibilities:
-Managing software architecture
-Infrastructure deployment pipelines
-Developing backend microservices
+Managing software architecture and backend microservices
+Configuring infrastructure deployment pipelines and server security
 
 educations:
 institution: Iran University of Science and Technology
